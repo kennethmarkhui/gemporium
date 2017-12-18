@@ -1,3 +1,7 @@
+<?php
+  $sql = "SELECT * FROM categories WHERE parent = 0";
+  $productQuery = $db->query($sql);
+?>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
@@ -15,16 +19,22 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#">Necklaces</a></li>
-        <li><a href="#">Bracelets</a></li>
-        <li><a href="#">Earrings</a></li>
-        <li><a href="#">Rings</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Others <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Watches</a></li>
-          </ul>
-        </li>
+        <?php while($parent = mysqli_fetch_assoc($productQuery)):?>
+          <?php
+            $parent_id =$parent['id'];
+            $sql2 = "SELECT * FROM categories WHERE parent = '$parent_id'";
+            $childQuery = $db->query($sql2);
+          ?>
+          <!-- Menu Items -->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $parent['category'];?><span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <?php while($child = mysqli_fetch_assoc($childQuery)):?>
+                <li><a href="#"><?php echo $child['category'];?></a></li>
+              <?php endwhile;?>
+            </ul>
+          </li>
+        <?php endwhile;?>
       </ul>
     </div>
   </div>
