@@ -5,7 +5,6 @@
     echo 'Database connection failed with the following errors: '.mysqli_connect_error();
     die();
   }
-
-
-  define('BASEURL', '/gemporium/');
+  require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/config.php';
+  require_once BASEURL.'functions/functions.php';
 ?>

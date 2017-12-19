@@ -7,7 +7,7 @@
   function detailsmodal(id){
     var data = {"id" : id};
     jQuery.ajax({
-      url : "<?php echo BASEURL;?>includes/detailsmodal.php",
+      url : "/gemporium/includes/detailsmodal.php",
       method : "post",
       data : data,
       success : function(data){
