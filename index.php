@@ -4,21 +4,24 @@
   include 'includes/navigation.php';
   include 'includes/mainheader.php';
   include 'includes/leftsidebar.php';
+
+  $sql = "SELECT * FROM products WHERE featured = 1";
+  $featuredProducts = $db->query($sql);
 ?>
 
       <!-- Main Content -->
       <div class="col-md-8">
         <div class="row">
           <h2 class="text-center">Featured Products</h2>
-          <div class="col-md-3">
-            <h4>Tiffany's Necklace</h4>
-            <img src="images/products/necklace.jpg" class="img-thumb" alt="Tiffany's Necklace">
-            <p class="list-price text-danger">List Price <s>₱100</s></p>
-            <p class="price">Our Price: ₱50</p>
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">Details</button>
-          </div>
-
-          <div class="col-md-3">
+          <?php while($product = mysqli_fetch_assoc($featuredProducts)):?>
+            <div class="col-md-3 text-center">
+              <h4><?php echo $product['title'];?></h4>
+              <img src="<?php echo $product['image'];?>" class="img-thumb" alt="<?php echo $product['title'];?>">
+              <p class="price">Our Price: ₱<?php echo $product['price'];?></p>
+              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">Details</button>
+            </div>
+          <?php endwhile;?>
+          <!-- <div class="col-md-3">
             <h4>Etsy's Family Necklace</h4>
             <img src="images/products/familynecklace.jpg" class="img-thumb" alt="Etsy's Family Necklace">
             <p class="list-price text-danger">List Price <s>₱150</s></p>
@@ -64,7 +67,8 @@
             <p class="list-price text-danger">List Price <s>₱100</s></p>
             <p class="price">Our Price: ₱50</p>
             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">Details</button>
-          </div>
+          </div> -->
+
         </div>
       </div>
 
