@@ -31,7 +31,7 @@
               <h4>Details</h4>
               <p><?php echo $product['description'];?></p>
               <hr>
-              <p>Price: ₱<?php $product['price'];?></p>
+              <p>Price: ₱<?php echo $product['price'];?></p>
               <hr />
               <form action="add_cart.php" method="post">
                 <div class="form-group">
