@@ -8,6 +8,22 @@
 
   $errors = array();
 
+  //Delete Category
+  if (isset($_GET['delete']) && !empty($_GET['delete'])) {
+    $deleteId = (int)$_GET['delete'];
+    $deleteId = sanitize($deleteId);
+    // $sql = "SELECT * FROM categories WHERE id = '$deleteId'";
+    // $result = $db->query($sql);
+    // $category = mysqli_fetch_assoc($result);
+    // if ($category['parent'] == 0) {
+    //   $sql = "DELETE FROM categories WHERE parent = '$deleteId'";
+    //   $db->query($sql);
+    // }
+    $deleteSql = "DELETE FROM categories WHERE id = '$deleteId' OR parent ='$deleteId'";
+    $db->query($deleteSql);
+    header('Location: categories.php');
+  }
+
   //Process Form
   if (isset($_POST) && !empty($_POST)) {
     $parent = sanitize($_POST['parent']);
@@ -35,8 +51,8 @@
       <?php
       }else{
       //Update Database
-      $updateSql = "INSERT INTO categories (category, parent) VALUES ('$category','$parent')";
-      $db->query($updateSql);
+      $updateCategory = "INSERT INTO categories (category, parent) VALUES ('$category','$parent')";
+      $db->query($updateCategory);
       header('Location: categories.php');
     }
   }
@@ -83,7 +99,7 @@
           ?>
           <tr class="bg-primary">
             <td><?php echo $parent['category'];?></td>
-            <td>Parent</td>
+            <td>Main Category</td>
             <td>
               <a href="categories.php?edit=<?php echo $parent['id'];?>" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
               <a href="categories.php?delete=<?php echo $parent['id'];?>" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-remove-sign"></span></a>
