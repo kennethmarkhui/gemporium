@@ -13,4 +13,9 @@
   function sanitize($dirtyString){
     return htmlentities($dirtyString,ENT_QUOTES,"UTF-8");
   }
+
+  //Philippine currency sign and format number to 2 decimal
+  function phmoney($number){
+    return '₱'.number_format($number,2);
+  }
 ?>
