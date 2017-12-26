@@ -27,3 +27,8 @@ body{
 #add-product-button{
   margin-top: -35px;
 }
+
+#archivedTable{
+  width: auto;
+  margin: 0 auto;
+}

@@ -6,11 +6,20 @@
   $sql = "SELECT * FROM products WHERE deleted != 1";
   $productResult = $db->query($sql);
 
+  // Set Featured On and Off for products
   if (isset($_GET['featured'])) {
     $id = (int)$_GET['id'];
     $featured = (int)$_GET['featured'];
     $featuredSql = "UPDATE products SET featured = '$featured' WHERE id = '$id'";
     $db->query($featuredSql);
+    header('Location: products.php');
+  }
+
+  //Delete Products and automatically set featured to 0
+  if (isset($_GET['delete'])) {
+    $deletedId = (int)$_GET['delete'];
+    $deletedSql = "UPDATE products SET deleted = 1, featured = 0 WHERE id = '$deletedId'";
+    $db->query($deletedSql);
     header('Location: products.php');
   }
 ?>
