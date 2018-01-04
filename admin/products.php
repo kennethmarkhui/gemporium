@@ -3,6 +3,63 @@
   include 'includes/head.php';
   include 'includes/navigation.php';
 
+  // If Add product button is clicked
+  if (isset($_GET['add'])) {
+    $parentQuery = $db->query("SELECT * FROM categories WHERE parent = 0 ORDER BY category");
+?>
+    <h2 class="text-center">Add a new Product</h2><hr>
+    <!-- Add Product Form -->
+    <form action="products.php?add=1" method="post" enctype="multipart/form-data">
+      <div class="form-group col-md-3">
+        <label for="title">Title*:</label>
+        <input type="text" name="title" class="form-control" id="title" value="<?php echo ((isset($_POST['title']))?sanitize($_POST['title']):'');?>">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="parent">Parent Category*:</label>
+        <select class="form-control" id="parent" name="parent">
+          <option value=""<?php echo ((isset($_POST['parent']) && $_POST['parent'] == '')?' selected':'');?>></option>
+          <?php while($parent = mysqli_fetch_assoc($parentQuery)):?>
+            <option value="<?php echo $parent['id'];?>"<?php echo ((isset($_POST['parent']) && $_POST['parent'] == $parent['id'])?' selected':'');?>><?php echo $parent['category'];?></option>
+          <?php endwhile;?>
+        </select>
+      </div>
+      <!-- Used ajax request to /admin/parsers/child_categories.php -->
+      <div class="form-group col-md-3">
+        <label for="child">Child Category:</label>
+        <select class="form-control" id="child" name="child">
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="price">Price*:</label>
+        <input type="text" id="price" name="price" class="form-control" value="<?php echo ((isset($_POST['price']))?sanitize($_POST['price']):'')?>">
+      </div>
+      <div class="form-group col-md-3">
+        <label>Quantity & Sizes*:</label>
+        <button class="btn btn-default form-control" onclick="jQuery('#sizesModal').modal('toggle');return false;">Quantity & Sizes</button>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="sizes">Sizes & Qty Preview</label>
+        <input type="text" class="form-control" name="sizes" id="sizes" value="<?php echo ((isset($_POST['sizes']))?$_POST['sizes']:'');?>" readonly>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="photo">Product Photo:</label>
+        <input type="file" name="photo" id="photo" class="form-control">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" class="form-control" rows="6">
+          <?php echo((isset($_POST['description']))?sanitize($_POST['description']):'');?>
+          </textarea>
+      </div>
+      <div class="form-group pull-right">
+        <input type="submit" value="Add Product" class="form-control btn btn-success">
+      </div>
+      <div class="clearfix"></div>
+    </form>
+
+<?php
+
+  }else {
   $sql = "SELECT * FROM products WHERE deleted != 1";
   $productResult = $db->query($sql);
 
@@ -50,4 +107,4 @@
   </tbody>
 </table>
 
-<?php include 'includes/footer.php';?>
+<?php } include 'includes/footer.php';?>
