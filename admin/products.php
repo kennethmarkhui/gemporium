@@ -6,6 +6,24 @@
   // If Add product button is clicked
   if (isset($_GET['add'])) {
     $parentQuery = $db->query("SELECT * FROM categories WHERE parent = 0 ORDER BY category");
+    if ($_POST) {
+      //Separate the sizes and quantity strings
+      if (!empty($_POST['sqPreview'])) {
+        $sizeString = sanitize($_POST['sqPreview']);
+        $sizeString = rtrim($sizeString,',');//Trim last ','
+        $sizesArray = explode(',', $sizeString);//Separete the strings with ','
+        $sArray = array();
+        $qArray = array();
+        foreach ($sizesArray as $ss) {
+          //Separate again with ':' and insert size in $sArray, quantity in $qArray
+          $s = explode(":", $ss);
+          $sArray[] = $s[0];
+          $qArray[] = $s[1];
+        }
+      }else {
+        $sizesArray = array();
+      }
+    }
 ?>
     <h2 class="text-center">Add a new Product</h2><hr>
     <!-- Add Product Form -->
@@ -38,8 +56,8 @@
         <button class="btn btn-default form-control" onclick="jQuery('#sizesModal').modal('toggle');return false;">Quantity & Sizes</button>
       </div>
       <div class="form-group col-md-3">
-        <label for="sizes">Sizes & Qty Preview</label>
-        <input type="text" class="form-control" name="sizes" id="sizes" value="<?php echo ((isset($_POST['sizes']))?$_POST['sizes']:'');?>" readonly>
+        <label for="sqPreview">Sizes & Qty Preview</label>
+        <input type="text" class="form-control" name="sqPreview" id="sqPreview" value="<?php echo ((isset($_POST['sizes']))?$_POST['sizes']:'');?>" readonly>
       </div>
       <div class="form-group col-md-6">
         <label for="photo">Product Photo:</label>
@@ -49,13 +67,43 @@
         <label for="description">Description:</label>
         <textarea name="description" id="description" class="form-control" rows="6">
           <?php echo((isset($_POST['description']))?sanitize($_POST['description']):'');?>
-          </textarea>
+        </textarea>
       </div>
       <div class="form-group pull-right">
         <input type="submit" value="Add Product" class="form-control btn btn-success">
       </div>
       <div class="clearfix"></div>
     </form>
+
+<!-- Modal -->
+<div class="modal fade" id="sizesModal" tabindex="-1" role="dialog" aria-labelledby="sizesModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="sizesModalLabel">Size & Quantity</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <?php for($i=1;$i<=12;$i++):?>
+            <div class="form-group col-md-4">
+              <label for="size<?php echo $i;?>">Size:</label>
+              <input type="text" name="size<?php echo $i;?>" id="size<?php echo $i;?>" value="<?php echo ((!empty($sArray[$i-1]))?$sArray[$i-1]:'')?>" class="form-control">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="qty<?php echo $i;?>">Quantity:</label>
+              <input type="number" name="qty<?php echo $i;?>" id="qty<?php echo $i;?>" value="<?php echo ((!empty($qArray[$i-1]))?$qArray[$i-1]:'')?>" min="0" class="form-control">
+            </div>
+          <?php endfor;?>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="updateSizes();jQuery('#sizesModal').modal('toggle');return false;">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <?php
 
