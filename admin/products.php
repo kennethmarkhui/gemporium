@@ -7,6 +7,13 @@
   if (isset($_GET['add'])) {
     $parentQuery = $db->query("SELECT * FROM categories WHERE parent = 0 ORDER BY category");
     if ($_POST) {
+      $title = sanitize($_POST['title']);
+      $price = sanitize($_POST['price']);
+      $categories = sanitize($_POST['child']);
+      $description = sanitize($_POST['description']);
+      $sizes = sanitize($_POST['sqPreview']);
+      $dbpath ='';
+      $errors = array();
       //Separate the sizes and quantity strings
       if (!empty($_POST['sqPreview'])) {
         $sizeString = sanitize($_POST['sqPreview']);
@@ -22,6 +29,50 @@
         }
       }else {
         $sizesArray = array();
+      }
+      $required = array('title','price','parent','sqPreview');
+      foreach ($required as $field) {
+        if ($_POST[$field] == '') {
+          $errors[] = 'All fields with an Asterisk are required.';
+          break;
+        }
+      }
+      if (!empty($_FILES)) {
+        $photo = $_FILES['photo'];
+        $name = $photo['name'];
+        $nameArray = explode('.', $name);
+        $fileName = $nameArray[0];
+        $fileExt = $nameArray[1];
+        $mime = explode('/', $photo['type']);
+        $mimeType = $mime[0];
+        $mimeExt = $mime[1];
+        $tmpLoc = $photo['tmp_name'];
+        $fileSize = $photo['size'];
+        $allowed = array('png','jpg','jpeg','gif');
+        $uploadName = md5(microtime()).'.'.$fileExt;
+        $uploadPath = BASEURL.'images/products/'.$uploadName;
+        $dbpath = '/gemporium/images/products/'.$uploadName;
+        if ($mimeType != 'image') {
+          $errors[] = 'The file must be an image.';
+        }
+        if (!in_array($fileExt, $allowed)) {
+          $errors[] = 'The file extension must be a PNG, JPG, JPEG or GIF.';
+        }
+        if ($fileSize > 5000000) {
+          $errors[] = 'The file size must be under 5MB';
+        }
+        if ($fileExt != $mimeExt && ($mimeExt == 'jpeg' && $fileExt != 'jpg')) {
+          $errors[] = 'The file extension does not match the file.';
+        }
+      }
+      if (!empty($errors)) {
+        echo display_errors($errors);
+      }else{
+        //Upload file and insert into database
+        move_uploaded_file($tmpLoc,$uploadPath);
+        $insertQuery = $db->query("INSERT INTO products (`title`,`price`,`categories`,`sizes`,`image`)
+         VALUES ('$title','$price','$categories','$sizes','$dbpath')");
+         header('Location: products.php');
       }
     }
 ?>
@@ -47,6 +98,7 @@
         <select class="form-control" id="child" name="child">
         </select>
       </div>
+
       <div class="form-group col-md-3">
         <label for="price">Price*:</label>
         <input type="text" id="price" name="price" class="form-control" value="<?php echo ((isset($_POST['price']))?sanitize($_POST['price']):'')?>">
@@ -56,8 +108,8 @@
         <button class="btn btn-default form-control" onclick="jQuery('#sizesModal').modal('toggle');return false;">Quantity & Sizes</button>
       </div>
       <div class="form-group col-md-3">
-        <label for="sqPreview">Sizes & Qty Preview</label>
-        <input type="text" class="form-control" name="sqPreview" id="sqPreview" value="<?php echo ((isset($_POST['sizes']))?$_POST['sizes']:'');?>" readonly>
+        <label for="sqPreview">Sizes & Qty Preview:</label>
+        <input type="text" class="form-control" name="sqPreview" id="sqPreview" value="<?php echo ((isset($_POST['sqPreview']))?$_POST['sqPreview']:'');?>" readonly>
       </div>
       <div class="form-group col-md-6">
         <label for="photo">Product Photo:</label>
