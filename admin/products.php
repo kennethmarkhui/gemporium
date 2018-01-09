@@ -9,7 +9,7 @@
     if ($_POST) {
       $title = sanitize($_POST['title']);
       $price = sanitize($_POST['price']);
-      $categories = sanitize($_POST['child']);
+      $category = sanitize($_POST['child']);
       $description = sanitize($_POST['description']);
       $sizes = sanitize($_POST['sqPreview']);
       $dbpath ='';
@@ -70,8 +70,9 @@
       }else{
         //Upload file and insert into database
         move_uploaded_file($tmpLoc,$uploadPath);
-        $insertQuery = $db->query("INSERT INTO products (`title`,`price`,`categories`,`sizes`,`image`)
-         VALUES ('$title','$price','$categories','$sizes','$dbpath')");
+        $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
+          VALUES ('$title', '$price', '$category', '$sizes', '$dbpath', '$description')";
+          $db->query($insertSql);
          header('Location: products.php');
       }
     }
@@ -117,9 +118,7 @@
       </div>
       <div class="form-group col-md-6">
         <label for="description">Description:</label>
-        <textarea name="description" id="description" class="form-control" rows="6">
-          <?php echo((isset($_POST['description']))?sanitize($_POST['description']):'');?>
-        </textarea>
+        <textarea name="description" id="description" class="form-control" rows="6"><?php echo((isset($_POST['description']))?sanitize($_POST['description']):'');?></textarea>
       </div>
       <div class="form-group pull-right">
         <input type="submit" value="Add Product" class="form-control btn btn-success">
