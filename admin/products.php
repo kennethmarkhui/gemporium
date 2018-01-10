@@ -9,7 +9,8 @@
     if ($_POST) {
       $title = sanitize($_POST['title']);
       $price = sanitize($_POST['price']);
-      $category = sanitize($_POST['child']);
+      $category = sanitize($_POST['parent']);
+      $withchildCategory = sanitize($_POST['child']);
       $description = sanitize($_POST['description']);
       $sizes = sanitize($_POST['sqPreview']);
       $dbpath ='';
@@ -69,9 +70,14 @@
         echo display_errors($errors);
       }else{
         //Upload file and insert into database
+        $sizes = rtrim($sizes,',');
         move_uploaded_file($tmpLoc,$uploadPath);
         $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
-          VALUES ('$title', '$price', '$category', '$sizes', '$dbpath', '$description')";
+          VALUES ('$title', '$price', '$withchildCategory', '$sizes', '$dbpath', '$description')";
+          if (empty($withchildCategory)) {
+            $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
+              VALUES ('$title', '$price', '$category', '$sizes', '$dbpath', '$description')";
+          }
           $db->query($insertSql);
          header('Location: products.php');
       }

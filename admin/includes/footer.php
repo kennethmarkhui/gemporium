@@ -28,8 +28,8 @@
       error: function(){alert("Something went wrong with the child options.")},
     });
   }
-  // Listener for Parent Category <select></select>
-  jQuery('select[name="parent"]').change(get_child_options);
+  // Listener for Parent Category in add new product
+  jQuery('select[name="parent"]').change(get_child_options);//select[name="parent"]
 </script>
 </body>
 </html>

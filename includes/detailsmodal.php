@@ -29,7 +29,7 @@
             </div>
             <div class="col-sm-6">
               <h4>Details</h4>
-              <p><?php echo $product['description'];?></p>
+              <p><?php echo nl2br($product['description']);?></p><!-- nl2br() preserve line breaks that the users typed -->
               <hr>
               <p>Price: ₱<?php echo $product['price'];?></p>
               <hr />
