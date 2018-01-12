@@ -61,7 +61,6 @@
         $sizesArray = array();
       }
       if ($_POST) {
-        $dbpath ='';
         $errors = array();
         $required = array('title','price','parent','sqPreview');
         foreach ($required as $field) {
