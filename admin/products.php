@@ -4,12 +4,28 @@
   include 'includes/navigation.php';
 
   // If Add product button is clicked
-  if (isset($_GET['add'])) {
+  if (isset($_GET['add']) || isset($_GET['edit'])) {
     $parentQuery = $db->query("SELECT * FROM categories WHERE parent = 0 ORDER BY category");
+    $title = ((isset($_POST['title']) && $_POST['title'] != '')?sanitize($_POST['title']):'');
+    $parentCategory = ((isset($_POST['parent']) && !empty($_POST['parent']))?sanitize($_POST['parent']):'');
+    $categorywchildID = ((isset($_POST['child']) && !empty($_POST['child']))?sanitize($_POST['child']):'');
+      //repopulate the fields when editing a product
+      if (isset($_GET['edit'])) {
+        $editID = (int)$_GET['edit'];
+        $productsEdit = $db->query("SELECT * FROM products WHERE id = '$editID'");
+        $productEdit = mysqli_fetch_assoc($productsEdit);
+        $categorywchildID = ((isset($_POST['child']) && $_POST['child'] != '')?sanitize($_POST['child']):$productEdit['categories']);
+        $title = ((isset($_POST['title']) && $_POST['title'] != '')?sanitize($_POST['title']):$productEdit['title']);
+        $parentQ = $db->query("SELECT * FROM categories WHERE id = '$categorywchildID'");
+        $parentResult = mysqli_fetch_assoc($parentQ);
+        $parentCategory = ((isset($_POST['parent']) && $_POST['parent'] != '')?sanitize($_POST['parent']):$parentResult['parent']);echo $categorywchildID;
+        //if parent does not have a child
+        if ($parentCategory == 0) {
+          $parentCategory = ((isset($_POST['parent']) && $_POST['parent'] != '')?sanitize($_POST['parent']):$productEdit['categories']);
+        }
+      }
     if ($_POST) {
-      $title = sanitize($_POST['title']);
       $price = sanitize($_POST['price']);
-      $category = sanitize($_POST['parent']);
       $withchildCategory = sanitize($_POST['child']);
       $description = sanitize($_POST['description']);
       $sizes = sanitize($_POST['sqPreview']);
@@ -76,26 +92,26 @@
           VALUES ('$title', '$price', '$withchildCategory', '$sizes', '$dbpath', '$description')";
           if (empty($withchildCategory)) {
             $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
-              VALUES ('$title', '$price', '$category', '$sizes', '$dbpath', '$description')";
+              VALUES ('$title', '$price', '$parentCategory', '$sizes', '$dbpath', '$description')";
           }
           $db->query($insertSql);
          header('Location: products.php');
       }
     }
 ?>
-    <h2 class="text-center">Add a new Product</h2><hr>
+    <h2 class="text-center"><?php echo ((isset($_GET['edit']))?'Edit':'Add a new');?> Product</h2><hr>
     <!-- Add Product Form -->
-    <form action="products.php?add=1" method="post" enctype="multipart/form-data">
+    <form action="products.php?<?php echo((isset($_GET['edit']))?'edit='.$editID:'add=1');?>" method="post" enctype="multipart/form-data">
       <div class="form-group col-md-3">
         <label for="title">Title*:</label>
-        <input type="text" name="title" class="form-control" id="title" value="<?php echo ((isset($_POST['title']))?sanitize($_POST['title']):'');?>">
+        <input type="text" name="title" class="form-control" id="title" value="<?php echo $title;?>">
       </div>
       <div class="form-group col-md-3">
         <label for="parent">Parent Category*:</label>
         <select class="form-control" id="parent" name="parent">
-          <option value=""<?php echo ((isset($_POST['parent']) && $_POST['parent'] == '')?' selected':'');?>></option>
-          <?php while($parent = mysqli_fetch_assoc($parentQuery)):?>
-            <option value="<?php echo $parent['id'];?>"<?php echo ((isset($_POST['parent']) && $_POST['parent'] == $parent['id'])?' selected':'');?>><?php echo $parent['category'];?></option>
+          <option value=""<?php echo (($parentCategory == '')?' selected':'');?>></option>
+          <?php while($p = mysqli_fetch_assoc($parentQuery)):?>
+            <option value="<?php echo $p['id'];?>"<?php echo (($parentCategory == $p['id'])?' selected':'');?>><?php echo $p['category'];?></option>
           <?php endwhile;?>
         </select>
       </div>
@@ -127,7 +143,8 @@
         <textarea name="description" id="description" class="form-control" rows="6"><?php echo((isset($_POST['description']))?sanitize($_POST['description']):'');?></textarea>
       </div>
       <div class="form-group pull-right">
-        <input type="submit" value="Add Product" class="form-control btn btn-success">
+        <a href="products.php" class="btn btn-default">Cancel</a>
+        <input type="submit" value="<?php echo ((isset($_GET['edit']))?'Edit':'Add')?> Product" class="btn btn-success">
       </div>
       <div class="clearfix"></div>
     </form>
@@ -185,6 +202,8 @@
     header('Location: products.php');
   }
 ?>
+
+<!-- Product Table -->
 <h2 class="text-center">Products</h2>
 <a href="products.php?add=1" class="btn btn-success pull-right" id="add-product-button">Add Product</a><div class="clearfix"></div>
 <hr>
