@@ -16,12 +16,15 @@
   }
 
   // products.php Add product Form get Child Category function
-  function get_child_options(){
+  function get_child_options(selected){
+    if (typeof selected === 'undefined') {
+      var selected = '';
+    }
     var parentID = jQuery('#parent').val();
     jQuery.ajax({
       url: '/gemporium/admin/parsers/child_categories.php',
       type: 'POST',
-      data: {parentID : parentID},
+      data: {parentID : parentID, selected : selected},
       success: function(data){
         jQuery('#child').html(data);
       },
@@ -29,7 +32,9 @@
     });
   }
   // Listener for Parent Category in add new product
-  jQuery('select[name="parent"]').change(get_child_options);//select[name="parent"]
+  jQuery('select[name="parent"]').change(function(){
+    get_child_options();
+  });//select[name="parent"]
 </script>
 </body>
 </html>

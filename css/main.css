@@ -32,3 +32,8 @@ body{
   width: auto;
   margin: 0 auto;
 }
+
+.saved-image img{
+  width : 200px;
+  height: auto;
+}

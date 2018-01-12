@@ -2,38 +2,51 @@
   require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
   include 'includes/head.php';
   include 'includes/navigation.php';
+  $dbpath = '';
 
   // If Add product button is clicked
   if (isset($_GET['add']) || isset($_GET['edit'])) {
     $parentQuery = $db->query("SELECT * FROM categories WHERE parent = 0 ORDER BY category");
+
     $title = ((isset($_POST['title']) && $_POST['title'] != '')?sanitize($_POST['title']):'');
     $parentCategory = ((isset($_POST['parent']) && !empty($_POST['parent']))?sanitize($_POST['parent']):'');
     $categorywchildID = ((isset($_POST['child']) && !empty($_POST['child']))?sanitize($_POST['child']):'');
+    $price = ((isset($_POST['price']) && $_POST['price'] != '')?sanitize($_POST['price']):'');
+    $description = ((isset($_POST['description']) && $_POST['description'] != '')?sanitize($_POST['description']):'');
+    $sqPreview = ((isset($_POST['sqPreview']) && $_POST['sqPreview'] != '')?sanitize($_POST['sqPreview']):'');
+    $savedImage = '';
       //repopulate the fields when editing a product
       if (isset($_GET['edit'])) {
         $editID = (int)$_GET['edit'];
         $productsEdit = $db->query("SELECT * FROM products WHERE id = '$editID'");
         $productEdit = mysqli_fetch_assoc($productsEdit);
+        if (isset($_GET['delete-image'])) {
+          $image_url = $_SERVER['DOCUMENT_ROOT'].$productEdit['image'];
+          unlink($image_url);
+          $db->query("UPDATE products SET image = '' WHERE id ='$editID'");
+          header('Location: products.php?edit='.$editID);
+        }
+
         $categorywchildID = ((isset($_POST['child']) && $_POST['child'] != '')?sanitize($_POST['child']):$productEdit['categories']);
         $title = ((isset($_POST['title']) && $_POST['title'] != '')?sanitize($_POST['title']):$productEdit['title']);
+
         $parentQ = $db->query("SELECT * FROM categories WHERE id = '$categorywchildID'");
         $parentResult = mysqli_fetch_assoc($parentQ);
-        $parentCategory = ((isset($_POST['parent']) && $_POST['parent'] != '')?sanitize($_POST['parent']):$parentResult['parent']);echo $categorywchildID;
+
+        $parentCategory = ((isset($_POST['parent']) && $_POST['parent'] != '')?sanitize($_POST['parent']):$parentResult['parent']);
+        $price = ((isset($_POST['price']) && $_POST['price'] != '')?sanitize($_POST['price']):$productEdit['price']);
+        $description = ((isset($_POST['description']) && $_POST['description'] != '')?sanitize($_POST['description']):$productEdit['description']);
+        $sqPreview = ((isset($_POST['sqPreview']) && $_POST['sqPreview'] != '')?sanitize($_POST['sqPreview']):$productEdit['size']);
+        $savedImage = (($productEdit['image'] != '')?$productEdit['image']:'');
+        $dbpath = $savedImage;
         //if parent does not have a child
         if ($parentCategory == 0) {
           $parentCategory = ((isset($_POST['parent']) && $_POST['parent'] != '')?sanitize($_POST['parent']):$productEdit['categories']);
         }
       }
-    if ($_POST) {
-      $price = sanitize($_POST['price']);
-      $withchildCategory = sanitize($_POST['child']);
-      $description = sanitize($_POST['description']);
-      $sizes = sanitize($_POST['sqPreview']);
-      $dbpath ='';
-      $errors = array();
       //Separate the sizes and quantity strings
-      if (!empty($_POST['sqPreview'])) {
-        $sizeString = sanitize($_POST['sqPreview']);
+      if (!empty($sqPreview)) {
+        $sizeString = sanitize($sqPreview);
         $sizeString = rtrim($sizeString,',');//Trim last ','
         $sizesArray = explode(',', $sizeString);//Separete the strings with ','
         $sArray = array();
@@ -47,57 +60,64 @@
       }else {
         $sizesArray = array();
       }
-      $required = array('title','price','parent','sqPreview');
-      foreach ($required as $field) {
-        if ($_POST[$field] == '') {
-          $errors[] = 'All fields with an Asterisk are required.';
-          break;
-        }
-      }
-      if (!empty($_FILES)) {
-        $photo = $_FILES['photo'];
-        $name = $photo['name'];
-        $nameArray = explode('.', $name);
-        $fileName = $nameArray[0];
-        $fileExt = $nameArray[1];
-        $mime = explode('/', $photo['type']);
-        $mimeType = $mime[0];
-        $mimeExt = $mime[1];
-        $tmpLoc = $photo['tmp_name'];
-        $fileSize = $photo['size'];
-        $allowed = array('png','jpg','jpeg','gif');
-        $uploadName = md5(microtime()).'.'.$fileExt;
-        $uploadPath = BASEURL.'images/products/'.$uploadName;
-        $dbpath = '/gemporium/images/products/'.$uploadName;
-        if ($mimeType != 'image') {
-          $errors[] = 'The file must be an image.';
-        }
-        if (!in_array($fileExt, $allowed)) {
-          $errors[] = 'The file extension must be a PNG, JPG, JPEG or GIF.';
-        }
-        if ($fileSize > 5000000) {
-          $errors[] = 'The file size must be under 5MB';
-        }
-        if ($fileExt != $mimeExt && ($mimeExt == 'jpeg' && $fileExt != 'jpg')) {
-          $errors[] = 'The file extension does not match the file.';
-        }
-      }
-      if (!empty($errors)) {
-        echo display_errors($errors);
-      }else{
-        //Upload file and insert into database
-        $sizes = rtrim($sizes,',');
-        move_uploaded_file($tmpLoc,$uploadPath);
-        $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
-          VALUES ('$title', '$price', '$withchildCategory', '$sizes', '$dbpath', '$description')";
-          if (empty($withchildCategory)) {
-            $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
-              VALUES ('$title', '$price', '$parentCategory', '$sizes', '$dbpath', '$description')";
+      if ($_POST) {
+        $dbpath ='';
+        $errors = array();
+        $required = array('title','price','parent','sqPreview');
+        foreach ($required as $field) {
+          if ($_POST[$field] == '') {
+            $errors[] = 'All fields with an Asterisk are required.';
+            break;
           }
-          $db->query($insertSql);
-         header('Location: products.php');
+        }
+        if (!empty($_FILES)) {
+          $photo = $_FILES['photo'];
+          $name = $photo['name'];
+          $nameArray = explode('.', $name);
+          $fileName = $nameArray[0];
+          $fileExt = $nameArray[1];
+          $mime = explode('/', $photo['type']);
+          $mimeType = $mime[0];
+          $mimeExt = $mime[1];
+          $tmpLoc = $photo['tmp_name'];
+          $fileSize = $photo['size'];
+          $allowed = array('png','jpg','jpeg','gif');
+          $uploadName = md5(microtime()).'.'.$fileExt;
+          $uploadPath = BASEURL.'images/products/'.$uploadName;
+          $dbpath = '/gemporium/images/products/'.$uploadName;
+          if ($mimeType != 'image') {
+            $errors[] = 'The file must be an image.';
+          }
+          if (!in_array($fileExt, $allowed)) {
+            $errors[] = 'The file extension must be a PNG, JPG, JPEG or GIF.';
+          }
+          if ($fileSize > 5000000) {
+            $errors[] = 'The file size must be under 5MB';
+          }
+          if ($fileExt != $mimeExt && ($mimeExt == 'jpeg' && $fileExt != 'jpg')) {
+            $errors[] = 'The file extension does not match the file.';
+          }
+        }
+        if (!empty($errors)) {
+          echo display_errors($errors);
+        }else{
+          //Upload file and insert into database
+          $sqPreview = rtrim($sqPreview,',');
+          move_uploaded_file($tmpLoc,$uploadPath);
+          $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
+            VALUES ('$title', '$price', '$categorywchildID', '$sqPreview', '$dbpath', '$description')";
+            if (empty($categorywchildID)) {
+              $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
+                VALUES ('$title', '$price', '$parentCategory', '$sqPreview', '$dbpath', '$description')";
+            }
+            if (isset($_GET['edit'])) {
+              $insertSql = "UPDATE products SET title = '$title', price = '$price', categories = '$categorywchildID', size = '$sqPreview', image = '$dbpath', description = '$description'
+              WHERE id = '$editID'";
+            }
+            $db->query($insertSql);
+           header('Location: products.php');
+        }
       }
-    }
 ?>
     <h2 class="text-center"><?php echo ((isset($_GET['edit']))?'Edit':'Add a new');?> Product</h2><hr>
     <!-- Add Product Form -->
@@ -124,7 +144,7 @@
 
       <div class="form-group col-md-3">
         <label for="price">Price*:</label>
-        <input type="text" id="price" name="price" class="form-control" value="<?php echo ((isset($_POST['price']))?sanitize($_POST['price']):'')?>">
+        <input type="text" id="price" name="price" class="form-control" value="<?php echo $price;?>">
       </div>
       <div class="form-group col-md-3">
         <label>Quantity & Sizes*:</label>
@@ -132,15 +152,22 @@
       </div>
       <div class="form-group col-md-3">
         <label for="sqPreview">Sizes & Qty Preview:</label>
-        <input type="text" class="form-control" name="sqPreview" id="sqPreview" value="<?php echo ((isset($_POST['sqPreview']))?$_POST['sqPreview']:'');?>" readonly>
+        <input type="text" class="form-control" name="sqPreview" id="sqPreview" value="<?php echo $sqPreview;?>" readonly>
       </div>
       <div class="form-group col-md-6">
-        <label for="photo">Product Photo:</label>
-        <input type="file" name="photo" id="photo" class="form-control">
+        <?php if($savedImage != ''):?>
+          <div class="saved-image">
+            <img src="<?php echo $savedImage;?>" alt="saved image"><br>
+            <a href="products.php?delete-image=1&edit=<?php echo $editID;?>" class="text-danger">Delete Image</a>
+          </div>
+        <?php else:?>
+          <label for="photo">Product Photo:</label>
+          <input type="file" name="photo" id="photo" class="form-control">
+        <?php endif;?>
       </div>
       <div class="form-group col-md-6">
         <label for="description">Description:</label>
-        <textarea name="description" id="description" class="form-control" rows="6"><?php echo((isset($_POST['description']))?sanitize($_POST['description']):'');?></textarea>
+        <textarea name="description" id="description" class="form-control" rows="6"><?php echo $description;?></textarea>
       </div>
       <div class="form-group pull-right">
         <a href="products.php" class="btn btn-default">Cancel</a>
@@ -232,3 +259,8 @@
 </table>
 
 <?php } include 'includes/footer.php';?>
+<script>
+  jQuery('document').ready(function(){
+    get_child_options('<?php echo $categorywchildID;?>');
+  });
+</script>
