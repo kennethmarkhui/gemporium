@@ -113,6 +113,10 @@
               $insertSql = "UPDATE products SET title = '$title', price = '$price', categories = '$categorywchildID', size = '$sqPreview', image = '$dbpath', description = '$description'
               WHERE id = '$editID'";
             }
+            // if (isset($_GET['edit']) && empty($categorywchildID)) {
+            //   $insertSql = "UPDATE products SET title = '$title', price = '$price', categories = '$parentCategory', size = '$sqPreview', image = '$dbpath', description = '$description'
+            //   WHERE id = '$editID'";
+            // }
             $db->query($insertSql);
            header('Location: products.php');
         }
@@ -222,7 +226,7 @@
 
   //Delete Products and automatically set featured to 0
   if (isset($_GET['delete'])) {
-    $deletedId = (int)$_GET['delete'];
+    $deletedId = sanitize($_GET['delete']);
     $deletedSql = "UPDATE products SET deleted = 1, featured = 0 WHERE id = '$deletedId'";
     $db->query($deletedSql);
     header('Location: products.php');
