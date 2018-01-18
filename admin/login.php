@@ -50,7 +50,8 @@
           echo display_errors($errors);
         }else {
           //Log user in
-          echo 'Log user in';
+          $userID = $user['id'];
+          login($userID);
         }
       }
     ?>

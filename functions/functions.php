@@ -18,4 +18,44 @@
   function phmoney($number){
     return '₱'.number_format($number,2);
   }
+
+  //Login user in Admin page
+  function login($userID){
+    $_SESSION['GPUser'] = $userID;
+    //Update Last Login of the user
+    global $db;
+    $date = date("Y-m-d H:i:s");
+    $db->query("UPDATE adminusers SET last_login = '$date' WHERE id = '$userID'");
+    $_SESSION['success_flash'] = 'You are now logged in!';
+    header("Location: index.php");
+  }
+
+  function is_logged_in(){
+    if (isset($_SESSION['GPUser']) && $_SESSION['GPUser'] > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  //Redirect page if not logged in
+  function login_error_redirect($url = 'login.php'){
+    $_SESSION['error_flash'] = 'You must be logged in to access that page.';
+    header('Location: '.$url);
+  }
+
+  //Permission to access a page
+  function has_permission($permission = 'admin'){
+    global $userData;
+    $permissions = explode(',', $userData['permissions']);
+    if (in_array($permission, $permissions, true)) {
+      return true;
+    }
+    return false;
+  }
+
+  //Redirect if user do not have permission to access
+  function permission_error_redirect($url = 'login.php'){
+    $_SESSION['error_flash'] = 'You do not have permission to access that page.';
+    header('Location: '.$url);
+  }
 ?>
