@@ -1,6 +1,7 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
   include 'includes/head.php';
+  
   $email = ((isset($_POST['email']))?sanitize($_POST['email']):'');
   $email = trim($email);
   $password = ((isset($_POST['password']))?sanitize($_POST['password']):'');
