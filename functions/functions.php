@@ -58,4 +58,8 @@
     $_SESSION['error_flash'] = 'You do not have permission to access that page.';
     header('Location: '.$url);
   }
+
+  function formatted_date($date){
+    return date("M d, Y h:i A",strtotime($date));
+  }
 ?>

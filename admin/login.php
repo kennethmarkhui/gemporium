@@ -1,7 +1,7 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
   include 'includes/head.php';
-  
+
   $email = ((isset($_POST['email']))?sanitize($_POST['email']):'');
   $email = trim($email);
   $password = ((isset($_POST['password']))?sanitize($_POST['password']):'');
@@ -58,7 +58,7 @@
     ?>
   </div>
 
-  <h2 class="text-center">Login</h2><hr>
+  <h2 class="text-center">Administrator Login</h2><hr>
   <form action="login.php" method="post">
     <div class="form-group">
       <label for="email">Email:</label>

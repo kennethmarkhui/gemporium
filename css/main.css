@@ -24,8 +24,12 @@ body{
   margin-top: 50px;
 }
 
-#add-product-button{
+#add-product-button, #add-user-button{
   margin-top: -35px;
+}
+
+#add-user-submit-button{
+  margin-top: 25px;
 }
 
 #archivedTable{
