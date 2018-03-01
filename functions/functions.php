@@ -62,4 +62,17 @@
   function formatted_date($date){
     return date("M d, Y h:i A",strtotime($date));
   }
+
+  function get_category($childID){
+    global $db;
+    $id = sanitize($childID);
+    $sql = "SELECT p.id AS 'pid', p.category AS 'parent', c.id AS 'cid', c.category AS 'child'
+            FROM categories c
+            INNER JOIN categories p
+            ON c.parent = p.id
+            WHERE c.id = '$id'";
+    $query = $db->query($sql);
+    $category = mysqli_fetch_assoc($query);
+    return $category;
+  }
 ?>

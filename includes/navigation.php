@@ -30,7 +30,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $parent['category'];?><span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <?php while($child = mysqli_fetch_assoc($childQuery)):?>
-                <li><a href="#"><?php echo $child['category'];?></a></li>
+                <li><a href="category.php?cat=<?php echo $child['id'];?>"><?php echo $child['category'];?></a></li>
               <?php endwhile;?>
             </ul>
           </li>
