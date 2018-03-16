@@ -70,3 +70,7 @@ img.details{
   margin: 8% auto;
   padding: 15px;
 }
+
+.totals-table-header th{
+  text-align: center;
+}
