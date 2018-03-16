@@ -105,7 +105,9 @@
         }else{
           //Upload file and insert into database
           $sqPreview = rtrim($sqPreview,',');
+          if(!empty($_FILES)){
           move_uploaded_file($tmpLoc,$uploadPath);
+          }
           $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
             VALUES ('$title', '$price', '$categorywchildID', '$sqPreview', '$dbpath', '$description')";
             if (empty($categorywchildID)) {

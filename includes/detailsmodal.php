@@ -22,6 +22,7 @@
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row">
+            <span id="modal_errors" class="bg-danger"></span>
             <div class="col-sm-6">
               <div class="center-block">
                 <img src="<?php echo $product['image'];?>" alt="<?php echo $product['title'];?>" class="details img-responsive">
@@ -33,7 +34,9 @@
               <hr>
               <p>Price: ₱<?php echo $product['price'];?></p>
               <hr />
-              <form action="add_cart.php" method="post">
+              <form action="add_cart.php" method="post" id="add_product_form">
+                <input type="hidden" name="product_id" value="<?php echo $id;?>">
+                <input type="hidden" name="available" id="available" value="">
                 <div class="form-group">
                   <div class="col-xs-3">
                     <label for="quantity">Quantity:</label>
@@ -49,14 +52,14 @@
                         //Seperate the size and quantity with colon
                         $stringArray = explode(':', $string);
                         $size = $stringArray[0];
-                        $quantity = $stringArray[1];
-                        echo '<option value="'.$size.'">'.$size.' ('.$quantity.'Available)</option>';
+                        $available = $stringArray[1];
+                        echo '<option value="'.$size.'" data-available="'.$available.'">'.$size.' ('.$available.'Available)</option>';
                       } ?>
                     </select>
                   </div>
                 </div>
               </form><br><br><br><br><hr>
-              <button type="submit" class="btn btn-warning btn-block"><span class="glyphicon glyphicon-shopping-cart"></span>Add to Cart</button>
+              <button class="btn btn-warning btn-block" onclick="add_to_cart();return false;"><span class="glyphicon glyphicon-shopping-cart"></span>Add to Cart</button>
               <button type="button" class="btn btn-default btn-block" onclick="closeModal()">Close</button>
             </div>
           </div>
@@ -67,6 +70,11 @@
 </div>
 
 <script>
+  jQuery('#size').change(function(){
+    var available = jQuery('#size option:selected').data("available");
+    jQuery("#available").val(available);
+  });
+
   function closeModal(){
     jQuery('#details-modal').modal('hide');
     //Remove id

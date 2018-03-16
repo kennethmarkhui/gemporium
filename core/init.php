@@ -9,6 +9,11 @@
   require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/config.php';
   require_once BASEURL.'functions/functions.php';
 
+  $cart_id = '';
+  if (isset($_COOKIE[CART_COOKIE])) {
+    $cart_id = sanitize($_COOKIE[CART_COOKIE]);
+  }
+
   if (isset($_SESSION['GPUser'])) {
     $userID = $_SESSION['GPUser'];
     $query = $db->query("SELECT * FROM adminusers WHERE id = '$userID'");
