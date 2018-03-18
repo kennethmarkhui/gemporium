@@ -44,7 +44,15 @@
                 <td><?php echo $i;?></td>
                 <td><?php echo $product['title'];?></td>
                 <td><?php echo phmoney($product['price']);?></td>
-                <td><?php echo $item['quantity'];?></td>
+                <td>
+                  <button class="btn btn-xs btn-default" onclick="update_cart('removeone','<?php echo $product['id'];?>','<?php echo $item['size'];?>');"> - </button>
+                  <?php echo $item['quantity'];?>
+                  <?php if($item['quantity'] < $available):?>
+                    <button class="btn btn-xs btn-default" onclick="update_cart('addone','<?php echo $product['id'];?>','<?php echo $item['size'];?>');"> + </button>
+                  <?php else:?>
+                    <span class="text-danger">Max</span>
+                  <?php endif;?>
+                </td>
                 <td><?php echo $item['size'];?></td>
                 <td><?php echo phmoney($item['quantity'] * $product['price']);?></td>
               </tr>
