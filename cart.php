@@ -88,25 +88,166 @@
 
       <!-- Modal -->
       <div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
               <h4 class="modal-title" id="checkoutModalLabel">Shipping Address</h4>
             </div>
             <div class="modal-body">
-              ...
+              <div class="row">
+                <form action="thankYou.php" method="post" id="payment-form">
+                  <span class="bg-danger" id="payment-errors"></span>
+                  <div id="checkout">
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Full Name</label>
+                      <div class="inputGroupContainer">
+                      <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                      <input name="full_name" placeholder="First & Last Name" class="form-control" id="full_name" type="text">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="full_name">Full Name:</label>
+                      <input class="form-control" id="full_name" type="text" name="full_name" placeholder="First & Last Name">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Email</label>
+                        <div class="inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                            <input name="email" placeholder="E-Mail Address" class="form-control" id="email" type="email">
+                          </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="email">Email:</label>
+                      <input class="form-control" id="email" type="email" name="email">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Mobile Number</label>
+                      <div class="inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                            <input name="mobile_number" placeholder="(+63)xxxxxxxxxx" class="form-control" id="mobile_number" type="text">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="mobileNumber">Mobile Number:</label>
+                      <input class="form-control" id="mobile_number" type="text" name="mobile_number" placeholder="Phone Number" maxlength="20">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Complete Address</label>
+                      <div class="inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                            <input name="address" placeholder="Address" class="form-control" id="address" type="text">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="street">Complete Address:</label>
+                      <input class="form-control" id="street" type="text" name="street">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">City</label>
+                      <div class="inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                            <input name="city" placeholder="City" class="form-control" id="city" type="text">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="city">City:</label>
+                      <input class="form-control" id="city" type="text" name="city">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Province</label>
+                      <div class="inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                            <input name="province" placeholder="Province" class="form-control" id="province" type="text">
+                        </div>
+                    </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="state">Province:</label>
+                      <input class="form-control" id="province" type="text" name="province">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Zip Code</label>
+                      <div class="inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                            <input name="zip_code" placeholder="Zip Code" class="form-control" id="zip_code" type="text">
+                        </div>
+                    </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="zip_code">Zip Code:</label>
+                      <input class="form-control" id="zip_code" type="text" name="zip_code">
+                    </div> -->
+                    <div class="form-group col-md-6">
+                      <label class="control-label">Country</label>
+                      <div class="inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                            <input name="country" class="form-control" id="country" type="text" value="Phillipines" readonly>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+                      <label for="country">Country:</label>
+                      <input class="form-control" id="country" type="text" name="country" value="Phillipines" readonly>
+                    </div> -->
+                  </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-primary" onclick="check_address();" id="continue_button">Verify</button>
+              <button type="submit" class="btn btn-primary" id="checkout_button" style="display:none;">Check Out</button>
+              </form>
             </div>
           </div>
         </div>
       </div>
-
     <?php endif;?>
   </div>
 </div>
+
+<script>
+    function check_address(){
+      var data = {
+        'full_name' : jQuery('#full_name').val(),
+        'email' : jQuery('#email').val(),
+        'address' : jQuery('#address').val(),
+        'city' : jQuery('#city').val(),
+        'province' : jQuery('#province').val(),
+        'zip_code' : jQuery('#zip_code').val(),
+        'country' : jQuery('#country').val(),
+        'mobile_number' : jQuery('#mobile_number').val(),
+      };
+      jQuery.ajax({
+        url : '/gemporium/admin/parsers/check_address.php',
+        method : 'POST',
+        data : data,
+        success : function(data){
+          if (data != 'passed') {
+            jQuery('#payment-errors').html(data);
+          }
+          if (data == 'passed') {
+            jQuery('#payment-errors').html("");
+            jQuery('#continue_button').css("display","none");
+            jQuery('#checkout_button').css("display","inline-block");
+          }
+        },
+        error : function(){alert("Something went wrong!");},
+      });
+    }
+</script>
 
 <?php include 'includes/footer.php';?>
