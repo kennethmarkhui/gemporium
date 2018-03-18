@@ -98,6 +98,11 @@
               <div class="row">
                 <form action="thankYou.php" method="post" id="payment-form">
                   <span class="bg-danger" id="payment-errors"></span>
+                  <input type="hidden" name="tax" value="<?php echo $tax;?>">
+                  <input type="hidden" name="sub_total" value="<?php echo $sub_total;?>">
+                  <input type="hidden" name="grand_total" value="<?php echo $grand_total;?>">
+                  <input type="hidden" name="cart_id" value="<?php echo $cart_id;?>">
+                  <input type="hidden" name="description" value="<?php echo $item_count.' item'.(($item_count>1)?'s':'').' from Gemporium';?>">
                   <div id="checkout">
                     <div class="form-group col-md-6">
                       <label class="control-label">Full Name</label>
