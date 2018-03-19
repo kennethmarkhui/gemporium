@@ -78,3 +78,7 @@ img.details{
 #cart_widget, #recent_widget td{
   font-size: 12px;
 }
+
+input.price-range{
+  width: 55px;
+}
