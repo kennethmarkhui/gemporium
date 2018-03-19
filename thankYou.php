@@ -30,6 +30,30 @@
   $order_id = generateOrderId();
   $txn_type = "Cash on Delivery";
 
+  // adjust inventory
+  $itemQ = $db->query("SELECT * FROM cart WHERE id = '{$cart_id}'");
+  $iresults = mysqli_fetch_assoc($itemQ);
+  $items = json_decode($iresults['items'],true);
+  foreach ($items as $item) {
+    $newSizes = array();
+    $item_id = $item['id'];
+    $productQ = $db->query("SELECT size FROM products WHERE id = '{$item_id}'");
+    $product = mysqli_fetch_assoc($productQ);
+    $sizes = sizesToArray($product['size']);
+    foreach ($sizes as $size) {
+      if ($size['size'] == $item['size']) {
+        $q = $size['quantity'] - $item['quantity'];
+        $newSizes[] = array('size' => $size['size'], 'quantity' => $q);
+      }else {
+        $newSizes[] = array('size' =>$size['size'], 'quantity' => $size['quantity']);
+      }
+    }
+    $sizeString = sizesToString($newSizes);
+    $db->query("UPDATE products SET size = '{$sizeString}' WHERE id = '{$item_id}'");
+  }
+
+
+// update cart
   $db->query("UPDATE cart SET ordered = 1 WHERE id = '{$cart_id}'");
   $db->query("INSERT INTO transactions
   (order_id,cart_id,full_name,email,mobile_number,address,city,province,zip_code,country,sub_total,tax,grand_total,description,txn_type) VALUES
