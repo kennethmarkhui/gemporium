@@ -38,7 +38,7 @@
 
         $parentCategory = ((isset($_POST['parent']) && $_POST['parent'] != '')?sanitize($_POST['parent']):$parentResult['parent']);
         $price = ((isset($_POST['price']) && $_POST['price'] != '')?sanitize($_POST['price']):$productEdit['price']);
-        $description = ((isset($_POST['description']) && $_POST['description'] != '')?sanitize($_POST['description']):$productEdit['description']);
+        $description = ((isset($_POST['description']))?sanitize($_POST['description']):$productEdit['description']);
         $sqPreview = ((isset($_POST['sqPreview']) && $_POST['sqPreview'] != '')?sanitize($_POST['sqPreview']):$productEdit['size']);
         $savedImage = (($productEdit['image'] != '')?$productEdit['image']:'');
         $dbpath = $savedImage;
@@ -72,7 +72,7 @@
             break;
           }
         }
-        if (!empty($_FILES)) {
+        if ($_FILES['photo']['name'] != '') {
           $photo = $_FILES['photo'];
           $name = $photo['name'];
           $nameArray = explode('.', $name);
