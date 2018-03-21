@@ -50,12 +50,16 @@ body{
   margin: 0 auto;
 }
 
-.saved-image img{
-  width : 200px;
-  height: auto;
+.saved-image{
+  text-align: center;
 }
 
-img.details{
+.saved-image img{
+  width : auto;
+  height: 150px;
+}
+
+fotorama__wrap{
   width: 90%;
   margin: 15px auto;
 }

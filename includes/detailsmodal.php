@@ -23,10 +23,11 @@
         <div class="container-fluid">
           <div class="row">
             <span id="modal_errors" class="bg-danger"></span>
-            <div class="col-sm-6">
-              <div class="center-block">
-                <img src="<?php echo $product['image'];?>" alt="<?php echo $product['title'];?>" class="details img-responsive">
-              </div>
+            <div class="col-sm-6 fotorama">
+              <?php $photos = explode(',',$product['image']);
+              foreach ($photos as $photo): ?>
+                <img src="<?php echo $photo;?>" alt="<?php echo $product['title'];?>" class="details img-responsive">
+              <?php endforeach;?>
             </div>
             <div class="col-sm-6">
               <h4>Details</h4>
@@ -75,6 +76,10 @@
   jQuery('#size').change(function(){
     var available = jQuery('#size option:selected').data("available");
     jQuery("#available").val(available);
+  });
+
+  $(function () {
+  $('.fotorama').fotorama({'loop':true,'autoplay':true});
   });
 
   function closeModal(){
