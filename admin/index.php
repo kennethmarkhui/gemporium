@@ -35,4 +35,63 @@
     </tbody>
   </table>
 </div>
+
+<div class="row">
+  <!-- Sales by month -->
+  <?php
+    $thisYr = date("Y");
+    $lastYr = $thisYr - 1;
+    $thisYrQ = $db->query("SELECT grand_total, txn_date FROM transactions WHERE YEAR(txn_date) = '{$thisYr}'");
+    $lastYrQ = $db->query("SELECT grand_total, txn_date FROM transactions WHERE YEAR(txn_date) = '{$lastYr}'");
+    $current = array();
+    $last = array();
+    $currentTotal = 0;
+    $lastTotal = 0;
+    while($x = mysqli_fetch_assoc($thisYrQ)){
+      $month = date("m",strtotime($x['txn_date']));
+      if (!array_key_exists($month,$current)) {
+        $current[(int)$month] = $x['grand_total'];
+      }else {
+        $current[(int)$month] += $x['grand_total'];
+      }
+      $currentTotal += $x['grand_total'];
+    }
+    while($y = mysqli_fetch_assoc($lastYrQ)){
+      $month = date("m",strtotime($y['txn_date']));
+      if (!array_key_exists($month,$last)) {
+        $last[(int)$month] = $y['grand_total'];
+      }else {
+        $last[(int)$month] += $y['grand_total'];
+      }
+      $lastTotal += $y['grand_total'];
+    }
+  ?>
+  <div class="col-md-4">
+    <h3 class="text-center">Sales by Month</h3>
+    <!-- check server time -->
+    <!-- <?php echo date("m-d-Y m:i:s");?> -->
+    <table class="table table-condensed table-striped table-bordered">
+      <thead>
+        <th></th><th><?php echo $lastYr;?></th><th><?php echo $thisYr;?></th>
+      </thead>
+      <tbody>
+        <?php for($i = 1;$i <= 12;$i++):
+          $dt = DateTime::createFromFormat('!m',$i);
+          ?>
+          <tr<?php echo ((date('m') == $i)?' class="info"':'');?>>
+            <td><?php echo $dt->format("F");?></td>
+            <td><?php echo ((array_key_exists($i,$last))?phmoney($last[$i]):phmoney(0));?></td>
+            <td><?php echo ((array_key_exists($i,$current))?phmoney($current[$i]):phmoney(0));?></td>
+          </tr>
+        <?php endfor;?>
+        <tr>
+          <td>Total</td>
+          <td><?php echo phmoney($lastTotal);?></td>
+          <td><?php echo phmoney($currentTotal);?></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Inventory -->
+</div>
 <?php include 'includes/footer.php';?>
