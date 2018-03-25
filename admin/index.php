@@ -47,24 +47,38 @@
     $last = array();
     $currentTotal = 0;
     $lastTotal = 0;
-    while($x = mysqli_fetch_assoc($thisYrQ)){
-      $month = date("m",strtotime($x['txn_date']));
-      if (!array_key_exists($month,$current)) {
-        $current[(int)$month] = $x['grand_total'];
-      }else {
-        $current[(int)$month] += $x['grand_total'];
-      }
-      $currentTotal += $x['grand_total'];
-    }
-    while($y = mysqli_fetch_assoc($lastYrQ)){
-      $month = date("m",strtotime($y['txn_date']));
-      if (!array_key_exists($month,$last)) {
-        $last[(int)$month] = $y['grand_total'];
-      }else {
-        $last[(int)$month] += $y['grand_total'];
-      }
-      $lastTotal += $y['grand_total'];
-    }
+     for ($month=1; $month <= 12 ; $month++) {
+       $last[(int)$month] = 0;
+       $current[(int)$month] = 0;
+     }
+     while ($x = mysqli_fetch_assoc($thisYrQ)) {
+       $month = date("m", strtotime($x['txn_date']));
+       $current[(int)$month] += $x['grand_total'];
+       $currentTotal += $x['grand_total'];
+     }
+     while ($y = mysqli_fetch_assoc($lastYrQ)) {
+       $month = date("m", strtotime($y['txn_date']));
+       $last[(int)$month] += $y['grand_total'];
+       $lastTotal += $y['grand_total'];
+     }
+    // while($x = mysqli_fetch_assoc($thisYrQ)){
+    //   $month = date("m",strtotime($x['txn_date']));
+    //   if (!array_key_exists($month,$current)) {
+    //     $current[(int)$month] = $x['grand_total'];
+    //   }else {
+    //     $current[(int)$month] += $x['grand_total'];
+    //   }
+    //   $currentTotal += $x['grand_total'];
+    // }
+    // while($y = mysqli_fetch_assoc($lastYrQ)){
+    //   $month = date("m",strtotime($y['txn_date']));
+    //   if (!array_key_exists($month,$last)) {
+    //     $last[(int)$month] = $y['grand_total'];
+    //   }else {
+    //     $last[(int)$month] += $y['grand_total'];
+    //   }
+    //   $lastTotal += $y['grand_total'];
+    // }
   ?>
   <div class="col-md-4">
     <h3 class="text-center">Sales by Month</h3>
