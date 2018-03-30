@@ -94,4 +94,5 @@
     $trimmed = rtrim($sizeString,',');
     return $trimmed;
   }
+
 ?>

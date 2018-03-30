@@ -23,6 +23,7 @@
         $editID = (int)$_GET['edit'];
         $productsEdit = $db->query("SELECT * FROM products WHERE id = '$editID'");
         $productEdit = mysqli_fetch_assoc($productsEdit);
+
         if (isset($_GET['delete-image'])) {
           $imgi = (int)$_GET['imgi'] - 1;
           $images = explode(',',$productEdit['image']);
@@ -33,6 +34,7 @@
           $db->query("UPDATE products SET image = '{$imageString}' WHERE id ='$editID'");
           header('Location: products.php?edit='.$editID);
         }
+
 
         $categorywchildID = ((isset($_POST['child']) && $_POST['child'] != '')?sanitize($_POST['child']):$productEdit['categories']);
         $title = ((isset($_POST['title']) && $_POST['title'] != '')?sanitize($_POST['title']):$productEdit['title']);
@@ -70,7 +72,7 @@
       if ($_POST) {
         $errors = array();
         $required = array('title','price','parent','sqPreview');
-        $allowed = array('png','jpg','jpeg','gif');
+        $allowed = array('png','jpg','jpeg','gif','mp4');
         $uploadPath = array();
         $tmpLoc = array();
         foreach ($required as $field) {
@@ -79,7 +81,9 @@
             break;
           }
         }
+
         $photoCount = count($_FILES['photo']['name']);
+
         if ($photoCount > 0) {
           for ($i=0; $i < $photoCount; $i++) {
               $name = $_FILES['photo']['name'][$i];
@@ -97,11 +101,11 @@
                 $dbpath .= ',';
               }
               $dbpath .= '/gemporium/images/products/'.$uploadName;
-              if ($mimeType != 'image') {
+              if ($mimeType != 'image' && $mimeType != 'video') {
                 $errors[] = 'The file must be an image.';
               }
               if (!in_array($fileExt, $allowed)) {
-                $errors[] = 'The file extension must be a PNG, JPG, JPEG or GIF.';
+                $errors[] = 'The file extension must be a PNG, JPG, JPEG, GIF or MP4.';
               }
               if ($fileSize > 5000000) {
                 $errors[] = 'The file size must be under 5MB';
@@ -111,6 +115,8 @@
               }
           }
         }
+
+
         if (!empty($errors)) {
           echo display_errors($errors);
         }else{
@@ -119,6 +125,11 @@
           if($photoCount > 0){
             for ($i=0; $i < $photoCount; $i++) {
               move_uploaded_file($tmpLoc[$i],$uploadPath[$i]);
+            }
+          }
+          if($videoCount > 0){
+            for ($i=0; $i < $videoCount; $i++) {
+              move_uploaded_file($vtmpLoc[$i],$vuploadPath[$i]);
             }
           }
           $insertSql = "INSERT INTO products (`title`, `price`, `categories`, `size`, `image`, `description`)
@@ -176,6 +187,13 @@
         <label for="sqPreview">Sizes & Qty Preview:</label>
         <input type="text" class="form-control" name="sqPreview" id="sqPreview" value="<?php echo $sqPreview;?>" readonly>
       </div>
+
+
+      <div class="form-group col-md-6">
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" class="form-control" rows="6"><?php echo $description;?></textarea>
+      </div>
+
       <div class="form-group col-md-6">
         <?php if($savedImage != ''):?>
           <?php
@@ -196,10 +214,7 @@
           <input type="file" name="photo[]" id="photo" class="form-control" multiple>
         <?php endif;?>
       </div>
-      <div class="form-group col-md-6">
-        <label for="description">Description:</label>
-        <textarea name="description" id="description" class="form-control" rows="6"><?php echo $description;?></textarea>
-      </div>
+
       <div class="form-group pull-right">
         <a href="products.php" class="btn btn-default">Cancel</a>
         <input type="submit" value="<?php echo ((isset($_GET['edit']))?'Edit':'Add')?> Product" class="btn btn-success">

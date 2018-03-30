@@ -21,7 +21,7 @@
         <div class="row">
           <h2 class="text-center"><?php echo $category['parent']. ' - ' . $category['child'];?></h2>
           <?php while($product = mysqli_fetch_assoc($productQ)):?>
-            <div class="col-md-3 text-center">
+            <div class="col-md-4 text-center">
               <h4><?php echo $product['title'];?></h4>
               <?php $photos = explode(',',$product['image']);?>
               <img src="<?php echo $photos[0];?>" class="img-thumb" alt="<?php echo $product['title'];?>">

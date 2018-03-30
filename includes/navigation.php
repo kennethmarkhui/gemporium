@@ -3,7 +3,7 @@
   $productQuery = $db->query($sql);
 ?>
 <!-- Navigation Bar -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar-default navbar-inverse navbar-fixed-top">
   <div class="container">
 
     <!-- Mobile Display -->
@@ -25,6 +25,7 @@
             $sql2 = "SELECT * FROM categories WHERE parent = '$parent_id'";
             $childQuery = $db->query($sql2);
           ?>
+
           <!-- Menu Items -->
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $parent['category'];?><span class="caret"></span></a>

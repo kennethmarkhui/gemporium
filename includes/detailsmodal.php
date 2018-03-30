@@ -23,12 +23,29 @@
         <div class="container-fluid">
           <div class="row">
             <span id="modal_errors" class="bg-danger"></span>
+
             <div class="col-sm-6 fotorama">
               <?php $photos = explode(',',$product['image']);
               foreach ($photos as $photo): ?>
-                <img src="<?php echo $photo;?>" alt="<?php echo $product['title'];?>" class="details img-responsive">
+                <?php
+                $info = pathinfo($photo);
+                if ($info["extension"] != "mp4"): ?>
+                  <img src="<?php echo $photo;?>" alt="<?php echo $product['title'];?>" class="details img-responsive">
+                <?php else: ?>
+                  <!-- <div class="player">
+                     <video>
+                        <source type="video/mp4" src="//mydomain.com/video.mp4">
+                     </video>
+                  </div> -->
+                  <div class="embed-responsive embed-responsive-4by3">
+                    <video autoplay loop muted class="embed-responsive-item">
+                      <source src="<?php echo $photo;?>" type="video/mp4">
+                    </video>
+                  </div>
+                <?php endif; ?>
               <?php endforeach;?>
             </div>
+
             <div class="col-sm-6">
               <h4>Details</h4>
               <p><?php echo nl2br($product['description']);?></p><!-- nl2br() preserve line breaks that the users typed -->
@@ -90,6 +107,13 @@
       jQuery('.modal-backdrop').remove();
     },500);
   }
+
+//   $(function () {
+//
+//    // install flowplayer into all elements with CSS class="player"
+//    $(".player").flowplayer();
+//
+// });
 </script>
 
 <?php echo ob_get_clean();?>
