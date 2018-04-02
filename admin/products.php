@@ -60,11 +60,13 @@
         $sizesArray = explode(',', $sizeString);//Separete the strings with ','
         $sArray = array();
         $qArray = array();
+        $tArray = array();
         foreach ($sizesArray as $ss) {
           //Separate again with ':' and insert size in $sArray, quantity in $qArray
           $s = explode(":", $ss);
           $sArray[] = $s[0];
           $qArray[] = $s[1];
+          $tArray[] = $s[2];
         }
       }else {
         $sizesArray = array();
@@ -233,13 +235,17 @@
       <div class="modal-body">
         <div class="container-fluid">
           <?php for($i=1;$i<=12;$i++):?>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
               <label for="size<?php echo $i;?>">Size:</label>
               <input type="text" name="size<?php echo $i;?>" id="size<?php echo $i;?>" value="<?php echo ((!empty($sArray[$i-1]))?$sArray[$i-1]:'')?>" class="form-control">
             </div>
             <div class="form-group col-md-2">
               <label for="qty<?php echo $i;?>">Quantity:</label>
               <input type="number" name="qty<?php echo $i;?>" id="qty<?php echo $i;?>" value="<?php echo ((!empty($qArray[$i-1]))?$qArray[$i-1]:'')?>" min="0" class="form-control">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="threshold<?php echo $i;?>">Threshold:</label>
+              <input type="number" name="threshold<?php echo $i;?>" id="threshold<?php echo $i;?>" value="<?php echo ((!empty($tArray[$i-1]))?$tArray[$i-1]:'')?>" min="0" class="form-control">
             </div>
           <?php endfor;?>
         </div>

@@ -43,9 +43,11 @@
     foreach ($sizes as $size) {
       if ($size['size'] == $item['size']) {
         $q = $size['quantity'] - $item['quantity'];
-        $newSizes[] = array('size' => $size['size'], 'quantity' => $q);
+        $t = $size['threshold'];
+        $newSizes[] = array('size' => $size['size'], 'quantity' => $q, 'threshold' => $t);
       }else {
-        $newSizes[] = array('size' =>$size['size'], 'quantity' => $size['quantity']);
+        $t = $size['threshold'];
+        $newSizes[] = array('size' =>$size['size'], 'quantity' => $size['quantity'], 'threshold' => $t);
       }
     }
     $sizeString = sizesToString($newSizes);

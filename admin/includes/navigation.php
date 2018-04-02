@@ -16,6 +16,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
           <!-- Menu Items -->
+          <li><a href="index.php">My Dashboard</a></li>
           <li><a href="categories.php">Categories</a></li>
           <li><a href="products.php">Products</a></li>
           <li><a href="archived.php">Archived</a></li>

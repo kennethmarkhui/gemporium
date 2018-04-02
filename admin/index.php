@@ -107,5 +107,42 @@
     </table>
   </div>
   <!-- Inventory -->
+  <?php
+    $iQuery = $db->query("SELECT * FROM products WHERE deleted = 0");
+    $lowItems = array();
+    while ($product = mysqli_fetch_assoc($iQuery)) {
+      $item = array();
+      $sizes = sizesToArray($product['size']);
+      foreach ($sizes as $size) {
+        if ($size['quantity'] <= $size['threshold']) {
+          $item = array(
+            'title' => $product['title'],
+            'size' => $size['size'],
+            'quantity' => $size['quantity'],
+            'threshold' => $size['threshold'],
+          );
+          $lowItems[] = $item;
+        }
+      }
+    }
+  ?>
+  <div class="col-md-8">
+    <h3 class="text-center">Low Inventory</h3>
+    <table class="table table-condensed table-striped table-bordered">
+      <thead>
+        <th>Product</th><th>Size</th><th>Quantity</th><th>Threshhold</th>
+      </thead>
+      <tbody>
+        <?php foreach ($lowItems as $item):?>
+        <tr<?php echo (($item['quantity'] == 0)?' class="danger"':'')?>>
+          <td><?php echo $item['title'];?></td>
+          <td><?php echo $item['size'];?></td>
+          <td><?php echo $item['quantity'];?></td>
+          <td><?php echo $item['threshold'];?></td>
+        </tr>
+      <?php endforeach;?>
+      </tbody>
+    </table>
+  </div>
 </div>
 <?php include 'includes/footer.php';?>
