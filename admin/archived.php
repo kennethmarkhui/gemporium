@@ -1,5 +1,6 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
+  ob_start();
+  require_once $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
   if (!is_logged_in()) {
     login_error_redirect();
   }
@@ -19,7 +20,7 @@
 ?>
 <h2 class="text-center">Archived</h2><hr>
 
-<table class="table table-condensed table-striped table-bordered" id="archivedTable">
+<table class="table table-condensed table-hover table-bordered" id="archivedTable">
   <thead>
     <th></th><th>Product</th><th>Price</th>
   </thead>

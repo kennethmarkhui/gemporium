@@ -17,7 +17,7 @@
 ?>
 <div class="col-md-12">
   <h3 class="text-center">Orders to Ship</h3>
-  <table class="table table-condensed table-bordered table-striped">
+  <table class="table table-condensed table-bordered table-hover">
     <thead>
       <th></th><th>Order ID</th><th>Name</th><th>Description</th><th>Total</th><th>Date</th>
     </thead>
@@ -84,7 +84,7 @@
     <h3 class="text-center">Sales by Month</h3>
     <!-- check server time -->
     <!-- <?php echo date("m-d-Y m:i:s");?> -->
-    <table class="table table-condensed table-striped table-bordered">
+    <table class="table table-condensed table-hover table-bordered">
       <thead>
         <th></th><th><?php echo $lastYr;?></th><th><?php echo $thisYr;?></th>
       </thead>
@@ -107,7 +107,7 @@
     </table>
   </div>
   <!-- Inventory -->
-  <?php
+    <?php
     $iQuery = $db->query("SELECT * FROM products WHERE deleted = 0");
     $lowItems = array();
     while ($product = mysqli_fetch_assoc($iQuery)) {
@@ -128,7 +128,7 @@
   ?>
   <div class="col-md-8">
     <h3 class="text-center">Low Inventory</h3>
-    <table class="table table-condensed table-striped table-bordered">
+    <table class="table table-condensed table-hover table-bordered">
       <thead>
         <th>Product</th><th>Size</th><th>Quantity</th><th>Threshhold</th>
       </thead>

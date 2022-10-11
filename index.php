@@ -12,13 +12,12 @@
 
    <div class="col-md-8">
      <div class="row">
-       <h2 class="text-center">Featured Products</h2>
-
+       <h2 class="text-center">Featured Products</h2><hr>
        <?php while($product = mysqli_fetch_assoc($featuredProducts)):?>
-         <div class="col-md-4 text-center img-thumbnail">
-           <h4><?php echo $product['title'];?></h4>
+         <div class="col-md-4 text-center">
+           <h4><?php echo (strlen($product['title']) > 17) ? substr($product['title'], 0, 17) . '...' : $product['title'];?></h4>
            <?php $photos = explode(',',$product['image']); ?>
-           <img src="<?php echo $photos[0];?>" class="img-thumb" alt="<?php echo $product['title'];?>">
+           <img src="<?php echo $photos[0];?>" class="img-thumb img-thumbnail" alt="<?php echo $product['title'];?>">
            <p class="price">Our Price: ₱<?php echo $product['price'];?></p>
            <button type="button" class="btn btn-sm btn-success" onclick="detailsmodal(<?php echo $product['id'];?>)">Details</button>
          </div>

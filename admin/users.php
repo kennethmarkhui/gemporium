@@ -1,4 +1,5 @@
 <?php
+  ob_start();
   require_once '../core/init.php';
   if (!is_logged_in()) {
     login_error_redirect();
@@ -112,7 +113,7 @@
 <h2>Users</h2>
 <a href="users.php?add=1" class="btn btn-default btn-success pull-right" id="add-user-button">Add New User</a>
 <hr>
-<table class="table table-bordered table-striped table-condensed">
+<table class="table table-bordered table-hover table-condensed">
   <thead>
     <th></th>
     <th>Name</th>

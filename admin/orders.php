@@ -1,4 +1,5 @@
 <?php
+  ob_start();
   require_once '../core/init.php';
   if (!is_logged_in()) {
     header('Location: login.php');
@@ -88,7 +89,7 @@
   <div class="col-md-6 text-center">
     <h3>Shipping Address</h3>
     <address>
-      <?php echo $txn['full_name'];?><br>
+      <strong><?php echo $txn['full_name'];?></strong><br>
       <?php echo $txn['mobile_number'];?><br>
       <?php echo $txn['address'];?><br>
       <?php echo $txn['city'].', '.$txn['province'].' '.$txn['zip_code'];?><br>

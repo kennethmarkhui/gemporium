@@ -1,4 +1,5 @@
 <?php
+  ob_start();
   // Display errors in an unordered list
   function display_errors($errors){
     $display = '<ul class="bg-danger">';

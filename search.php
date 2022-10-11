@@ -41,9 +41,9 @@
           <?php endif;?>
           <?php while($product = mysqli_fetch_assoc($productQ)):?>
             <div class="col-md-4 text-center">
-              <h4><?php echo $product['title'];?></h4>
+              <h4><?php echo (strlen($product['title']) > 17) ? substr($product['title'], 0, 17) . '...' :$product['title'];?></h4>
               <?php $photos = explode(',',$product['image'])?>
-              <img src="<?php echo $photos[0];?>" class="img-thumb" alt="<?php echo $product['title'];?>">
+              <img src="<?php echo $photos[0];?>" class="img-thumb img-thumbnail" alt="<?php echo $product['title'];?>">
               <p class="price">Our Price: ₱<?php echo $product['price'];?></p>
               <button type="button" class="btn btn-sm btn-success" onclick="detailsmodal(<?php echo $product['id'];?>)">Details</button>
             </div>

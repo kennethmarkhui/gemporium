@@ -1,5 +1,5 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
+  require_once $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
   include 'includes/head.php';
 
   $email = ((isset($_POST['email']))?sanitize($_POST['email']):'');
@@ -11,7 +11,7 @@
 
 <style>
   body{
-    background-image: url("/gemporium/images/header/background.png");
+    background-image: url("/images/header/background.png");
     background-size: 100vw 100vh;
     background-attachment: fixed;
   }
@@ -72,7 +72,7 @@
       <input type="submit" value="Login" class="btn btn-primary">
     </div>
   </form>
-  <p class="text-right"><a href="/gemporium/index.php" alt="home">Visit Site</a></p>
+  <p class="text-right"><a href="/index.php" alt="home">Visit Site</a></p>
 </div>
 
 <?php include 'includes/footer.php'; ?>

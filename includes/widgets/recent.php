@@ -18,7 +18,7 @@
     }
   }
 ?>
-<div id="recent_widget">
+<div id="recent_widget" class="text-center">
   <table class="table table-condensed">
     <?php foreach($used_ids as $id):
       $productQ = $db->query("SELECT id,title FROM products WHERE id = '$id'");

@@ -1,5 +1,6 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
+  ob_start();
+  require_once $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
   if (!is_logged_in()) {
     login_error_redirect();
   }
@@ -135,7 +136,7 @@
           <?php while($child = mysqli_fetch_assoc($subCategory)):?>
             <tr>
               <tr class="bg-info">
-                <td><?php echo $child['category'];?></td>
+                <td>- <?php echo $child['category'];?></td>
                 <td><?php echo $parent['category'];?></td>
                 <td>
                   <a href="categories.php?edit=<?php echo $child['id'];?>" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a>

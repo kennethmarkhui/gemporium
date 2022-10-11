@@ -7,7 +7,7 @@
   function detailsmodal(id){
     var data = {"id" : id};
     jQuery.ajax({
-      url : "/gemporium/includes/detailsmodal.php",
+      url : "/includes/detailsmodal.php",
       method : "post",
       data : data,
       success : function(data){
@@ -24,7 +24,7 @@
   function update_cart(mode,edit_id,edit_size){
     var data = {"mode" : mode, "edit_id" : edit_id, "edit_size": edit_size};
     jQuery.ajax({
-      url : '/gemporium/admin/parsers/update_cart.php',
+      url : '/admin/parsers/update_cart.php',
       method : "POST",
       data : data,
       success : function(){location.reload();},
@@ -49,7 +49,7 @@
       return;
     }else {
       jQuery.ajax({
-        url : '/gemporium/admin/parsers/add_cart.php',
+        url : '/admin/parsers/add_cart.php',
         method : 'POST',
         data : data,
         success : function(){

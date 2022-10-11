@@ -1,5 +1,6 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
+  ob_start();
+  require_once $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
   if (!is_logged_in()) {
     login_error_redirect();
   }
@@ -102,14 +103,14 @@
               if ($i != 0) {
                 $dbpath .= ',';
               }
-              $dbpath .= '/gemporium/images/products/'.$uploadName;
+              $dbpath .= '/images/products/'.$uploadName;
               if ($mimeType != 'image' && $mimeType != 'video') {
                 $errors[] = 'The file must be an image.';
               }
               if (!in_array($fileExt, $allowed)) {
                 $errors[] = 'The file extension must be a PNG, JPG, JPEG, GIF or MP4.';
               }
-              if ($fileSize > 5000000) {
+              if ($fileSize > 10000000) {
                 $errors[] = 'The file size must be under 5MB';
               }
               if ($fileExt != $mimeExt && ($mimeExt == 'jpeg' && $fileExt != 'jpg')) {
@@ -204,7 +205,7 @@
           ?>
           <?php foreach ($images as $image): ?>
           <div class="saved-image col-md-4">
-            <img src="<?php echo $image;?>" alt="saved image"><br>
+            <img src="<?php echo $image;?>" class="img-thumbnail" alt="saved image"><br>
             <a href="products.php?delete-image=1&edit=<?php echo $editID;?>&imgi=<?php echo $imgi;?>" class="text-danger">Delete Image</a>
           </div>
           <?php
@@ -286,9 +287,10 @@
 <h2 class="text-center">Products</h2>
 <a href="products.php?add=1" class="btn btn-success pull-right" id="add-product-button">Add Product</a><div class="clearfix"></div>
 <hr>
-<table class="table table-bordered table-condensed table-striped">
+<table class="table table-bordered table-condensed table-hover">
   <thead>
-    <th></th><th>Product</th><th>Price</th><th>Featured</th><th>Sold</th>
+    <th></th><th>Product</th><th>Price</th><th>Featured</th>
+    <!--<th>Sold</th>-->
   </thead>
   <tbody>
     <?php while($product = mysqli_fetch_assoc($productResult)):?>
@@ -304,7 +306,7 @@
             <span class="glyphicon glyphicon-<?php echo (($product['featured'] == 1)?'minus':'plus');?>"></span>
           </a><?php echo (($product['featured'] == 1)?'Featured Product':'');?>
         </td>
-        <td>0</td>
+        <!--<td>0</td>-->
       </tr>
     <?php endwhile;?>
   </tbody>

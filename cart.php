@@ -103,13 +103,14 @@
                   <input type="hidden" name="grand_total" value="<?php echo $grand_total;?>">
                   <input type="hidden" name="cart_id" value="<?php echo $cart_id;?>">
                   <input type="hidden" name="description" value="<?php echo $item_count.' item'.(($item_count>1)?'s':'').' from Gemporium';?>">
+                  
                   <div id="checkout">
                     <div class="form-group col-md-6">
                       <label class="control-label">Full Name</label>
                       <div class="inputGroupContainer">
-                      <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                      <input name="full_name" placeholder="First & Last Name" class="form-control" id="full_name" type="text">
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                          <input name="full_name" placeholder="First & Last Name" class="form-control" id="full_name" type="text">
                         </div>
                       </div>
                     </div>
@@ -135,7 +136,8 @@
                       <div class="inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                            <input name="mobile_number" placeholder="(+63)xxxxxxxxxx" class="form-control" id="mobile_number" type="text">
+                            <span class="input-group-addon">+63</span>
+                            <input name="mobile_number" placeholder="9xxxxxxxxx" class="form-control" id="mobile_number" type="text">
                         </div>
                       </div>
                     </div>
@@ -237,7 +239,7 @@
         'mobile_number' : jQuery('#mobile_number').val(),
       };
       jQuery.ajax({
-        url : '/gemporium/admin/parsers/check_address.php',
+        url : '/admin/parsers/check_address.php',
         method : 'POST',
         data : data,
         success : function(data){

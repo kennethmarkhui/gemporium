@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Gemporium</title>
+    <link rel="icon" href="/images/favicon.ico">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link  href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">

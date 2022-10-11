@@ -1,5 +1,5 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'].'/gemporium/core/init.php';
+  require_once $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
   if (!is_logged_in()) {
     login_error_redirect();
   }
@@ -19,7 +19,7 @@
 
 <style>
   body{
-    background-image: url("/gemporium/images/header/background.png");
+    background-image: url("/images/header/background.png");
     background-size: 100vw 100vh;
     background-attachment: fixed;
   }
@@ -79,7 +79,7 @@
       <input type="submit" value="Login" class="btn btn-primary">
     </div>
   </form>
-  <p class="text-right"><a href="/gemporium/index.php" alt="home">Visit Site</a></p>
+  <p class="text-right"><a href="/index.php" alt="home">Visit Site</a></p>
 </div>
 
 <?php include 'includes/footer.php'; ?>
